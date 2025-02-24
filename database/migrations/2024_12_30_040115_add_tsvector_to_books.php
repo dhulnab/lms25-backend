@@ -10,9 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE books ADD COLUMN tsv tsvector GENERATED ALWAYS AS ( to_tsvector('english', coalesce(title, '') || ' ' || coalesce(description, '') || ' ' || coalesce(author, ''))) STORED");
-
-        DB::statement('CREATE INDEX books_tsv_idx ON books USING gin(tsv)');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE books ADD COLUMN tsv tsvector GENERATED ALWAYS AS ( to_tsvector('english', coalesce(title, '') || ' ' || coalesce(description, '') || ' ' || coalesce(author, ''))) STORED");
+            DB::statement('CREATE INDEX books_tsv_idx ON books USING gin(tsv)');
+        }
     }
 
     /**
@@ -20,8 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE books DROP COLUMN tsv");
-
-        DB::statement('DROP INDEX IF EXISTS books_tsv_idx');
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement("ALTER TABLE books DROP COLUMN tsv");
+            DB::statement('DROP INDEX IF EXISTS books_tsv_idx');
+        }
     }
 };

@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('penalties', function (Blueprint $table) {
-            $table->timestamps();
-        });
+        if (!Schema::hasColumn('penalties', 'created_at')) {
+            Schema::table('penalties', function (Blueprint $table) {
+                $table->timestamps();
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('penalties', function (Blueprint $table) {
-            $table->dropTimestamps();
-        });
+        if (Schema::hasColumn('penalties', 'created_at')) {
+            Schema::table('penalties', function (Blueprint $table) {
+                $table->dropTimestamps();
+            });
+        }
     }
 };
