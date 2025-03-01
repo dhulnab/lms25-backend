@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,7 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -38,7 +40,10 @@ class User extends Authenticatable implements JWTSubject
      * @return mixed
      */
 
-
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return ($this->role === 'admin') && $this->hasVerifiedEmail();
+    }
     public function book_borrowings(): HasMany
     {
         return $this->hasMany(Book_borrowing::class);
