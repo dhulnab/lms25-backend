@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EBookController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\FindBestCopyController;
 use App\Http\Controllers\Api\ForBorrowCopyController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Middleware\ClientAuth;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ Route::post('/Admin/login', [AdminController::class, 'login']);
 Route::post('/email/verify', [EmailVerificationController::class, 'emailVerification']);
 Route::post('/refresh-token', [UserController::class, 'refreshToken']);
 
+Route::get('/home', [HomeController::class, 'index']);
 Route::middleware([ClientAuth::class])->group(function () {
     //user
     Route::get('user', [UserController::class, 'getUser']);
