@@ -40,11 +40,13 @@ class BookResource extends Resource
             // Cover image upload
             Forms\Components\FileUpload::make('cover')
                 ->label('Upload Cover Image')
-                ->disk('public')
+                ->disk('s3')
                 ->directory('covers')
                 ->visibility('public')
-                ->preserveFilenames()
                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'application/pdf'])
+                ->maxFiles(1)
+                ->imageEditor()
+                ->imageEditorAspectRatios(['4:3', '16:9'])
                 ->maxSize(10240)
                 ->required(),
 
@@ -127,10 +129,9 @@ class BookResource extends Resource
             // Electronic book upload (stored privately): only visible if electronic is available
             Forms\Components\FileUpload::make('link')
                 ->label('Upload The Electronic Book')
-                ->disk('private')
+                ->disk('s3')
                 ->directory('books')
                 ->visibility('private')
-                ->preserveFilenames()
                 ->acceptedFileTypes(['application/pdf', 'application/epub'])
                 ->maxSize(512000)
                 ->required(fn(callable $get): bool => (bool) $get('electronic_available'))
@@ -151,8 +152,12 @@ class BookResource extends Resource
 
             // Image column for the cover; using a callback to prepend the directory path
             Tables\Columns\ImageColumn::make('cover')
-                ->disk('public')
-                ->url(fn($record) => Storage::disk('public')->url($record->cover)),
+                ->disk('s3')
+                ->visibility('public')
+                ->width(50) // Set the desired width
+                ->height(75) // Set the desired height
+                ->url(fn($record) => Storage::disk('s3')->url($record->cover))
+                ->label('Cover Image'),
 
             Tables\Columns\TextColumn::make('first_category.name')
                 ->label('First Category')
