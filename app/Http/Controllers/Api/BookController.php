@@ -18,7 +18,7 @@ class BookController extends Controller
         $category = $request->input('category');
 
         // Apply search with fuzzy matching and filters
-        $query = Book::search($term);
+        $query = Book::with('first_category', 'second_category', 'third_category')->search($term);
 
         // Apply filters if present
         if ($minPrice && $maxPrice) {

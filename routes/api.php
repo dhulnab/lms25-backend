@@ -20,8 +20,8 @@ Route::post('/Admin/login', [AdminController::class, 'login']);
 Route::post('/email/verify', [EmailVerificationController::class, 'emailVerification']);
 Route::post('/refresh-token', [UserController::class, 'refreshToken']);
 
-Route::get('/home', [HomeController::class, 'index']);
 Route::middleware([ClientAuth::class])->group(function () {
+    Route::get('/home', [HomeController::class, 'index']);
     //user
     Route::get('user', [UserController::class, 'getUser']);
     Route::post('logout', [UserController::class, 'logout']);
