@@ -18,7 +18,7 @@ class ViewBook extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         $filePath = $this->record->link;
-        $temporaryUrl = Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(30));
+        $temporaryUrl = $filePath ? Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(30)) : null;
         return $infolist
             ->schema([
                 Components\ImageEntry::make('cover')
