@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Book;
 use App\Models\First_category;
 use App\Models\Second_category;
 use App\Models\Third_category;
@@ -222,9 +223,9 @@ class CategoriesController extends Controller
 
 
         $categoryBooks = match ($type) {
-            1 => First_category::find($id)?->books,
-            2 => Second_category::find($id)?->books,
-            3 => Third_category::find($id)?->books,
+            1 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('first_category_id', $id)->get(),
+            2 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('second_category_id', $id)->get(),
+            3 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('third_category_id', $id)->get(),
             default => null,
         };
 
