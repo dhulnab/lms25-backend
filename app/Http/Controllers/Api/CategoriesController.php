@@ -223,9 +223,9 @@ class CategoriesController extends Controller
 
 
         $categoryBooks = match ($type) {
-            1 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('first_category_id', $id)->get(),
-            2 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('second_category_id', $id)->get(),
-            3 => Book::with('firstCategory', 'secondCategory', 'thirdCategory')->where('third_category_id', $id)->get(),
+            1 => Book::with('first_category', 'second_category', 'third_category')->where('first_category_id', $id)->get(),
+            2 => Book::with('first_category', 'second_category', 'third_category')->where('second_category_id', $id)->get(),
+            3 => Book::with('first_category', 'second_category', 'third_category')->where('third_category_id', $id)->get(),
             default => null,
         };
 
