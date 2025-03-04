@@ -33,6 +33,7 @@ Route::middleware([ClientAuth::class])->group(function () {
     Route::get('category-books/{id}', [CategoriesController::class, 'categoryBooks']);
     Route::get('categories', [CategoriesController::class, 'getCategories']);
     Route::get('categories/{id}', [CategoriesController::class, 'getCategories']);
+    Route::get('categories/child-categories/{id}', [CategoriesController::class, 'childCategories']);
     //for borrow copy
     Route::get('borrow-copy/{bookId}/{id?}', [ForBorrowCopyController::class, 'getForBorrowCopy']);
     //borrow request

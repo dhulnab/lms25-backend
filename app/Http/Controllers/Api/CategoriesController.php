@@ -11,6 +11,39 @@ use Illuminate\Validation\Rule;
 
 class CategoriesController extends Controller
 {
+    public function childCategories(Request $request, $id)
+    {
+        $type = intval($request->query('type'));
+        if (!$type) {
+            return response()->json([
+                'error' => 'Type of category is missing. Example: put [type=1] for first category in the url.'
+            ], 400);
+        }
+        if ($type > 3 || $type < 1) {
+            return response()->json(['error' => 'invalid type number'], 400);
+        }
+        $category = match ($type) {
+            1 => First_category::find($id),
+            2 => Second_category::find($id),
+            3 => Third_category::find($id),
+            default => null
+        };
+
+        if (!$category) {
+            return response()->json([
+                'error' => 'Category not found'
+            ], 404);
+        }
+        $childCategories = match ($type) {
+            2 => Second_category::where('first_category_id', $id)->get(),
+            3 => Third_category::where('second_category_id', $id)->get(),
+            default => null
+        };
+        return response()->json([
+            'success' => true,
+            'data' => $childCategories
+        ], 200);
+    }
     public function getCategories(Request $request, $id = null)
     {
         $type = intval($request->query('type'));
