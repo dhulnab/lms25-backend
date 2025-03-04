@@ -35,8 +35,8 @@ class CategoriesController extends Controller
             ], 404);
         }
         $childCategories = match ($type) {
-            2 => Second_category::where('first_category_id', $id)->get(),
-            3 => Third_category::where('second_category_id', $id)->get(),
+            2 => Second_category::where('parent_id', $id)->get(),
+            3 => Third_category::where('parent_id', $id)->get(),
             default => null
         };
         return response()->json([
