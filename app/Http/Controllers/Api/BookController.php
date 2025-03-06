@@ -43,7 +43,7 @@ class BookController extends Controller
     public function getBook($id = null)
     {
         if ($id) {
-            $book = Book::find($id);
+            $book = Book::with('first_category', 'second_category', 'third_category')->find($id);
             if (!$book) {
                 return response()->json([
                     'success' => false,
